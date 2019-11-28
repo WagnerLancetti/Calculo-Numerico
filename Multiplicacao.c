@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define TAM 7
 
 float **Inicializa_Matriz(float **Matriz, int linhas, int colunas){
     Matriz = (float**) malloc (linhas * sizeof(float*));
@@ -16,7 +15,7 @@ float *Inicializa_Vetor (float *y, int linhas){
 }
 
 
-float* Transposta_X_Funcao(float **Matriz_Transposta,float *y,float *resultado2){
+float* Transposta_X_Funcao(float **Matriz_Transposta,float *y,float *resultado2,int TAM){
      for (int h = 0; h < 6; h++){ // h = LINHAS RESULTADO (Linha da transposta)
         resultado2[h] = 0;
         for (int k = 0; k < TAM; k++){ // K = FATOR QUE PERMITE A OPERACAO ENTRE AS MATRIZES (Coluna da transposta E Linha da original)
@@ -27,7 +26,7 @@ float* Transposta_X_Funcao(float **Matriz_Transposta,float *y,float *resultado2)
 }
 
 
-float **Transposta_X_Original(float **Matriz_Transposta, float **Matriz_Original, float **resultado){
+float **Transposta_X_Original(float **Matriz_Transposta, float **Matriz_Original, float **resultado, int TAM){
     for (int h = 0; h < 6; h++){ // h = LINHAS RESULTADO (Linha da transposta)
         for (int y = 0; y < 6; y++){  // Y = COLUNAS RESULTADO (Coluna da original)
             resultado[h][y] = 0;
@@ -39,7 +38,7 @@ float **Transposta_X_Original(float **Matriz_Transposta, float **Matriz_Original
     return resultado;
 }   
 
-float** GerarTransposta (float **Matriz_Original){
+float** GerarTransposta (float **Matriz_Original, int TAM){
     float **Matriz_Transposta = NULL;
     Matriz_Transposta = Inicializa_Matriz(Matriz_Transposta,6,TAM);
     for (int i = 0; i < 6;i++){
