@@ -1,20 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-float **Inicializa_Matriz(float **Matriz, int linhas, int colunas){
-    Matriz = (float**) malloc (linhas * sizeof(float*));
+double **Inicializa_Matriz(double **Matriz, int linhas, int colunas){
+    Matriz = (double**) malloc (linhas * sizeof(double*));
     for (int i = 0; i < linhas; i++){
-        Matriz[i] = (float*) malloc (colunas *  sizeof(float));
+        Matriz[i] = (double*) malloc (colunas *  sizeof(double));
     }
     return Matriz;
 }
 
-float *Inicializa_Vetor (float *y, int linhas){
-    return (float*) malloc (linhas*sizeof(float));
+double *Inicializa_Vetor (double *y, int linhas){
+    return (double*) malloc (linhas*sizeof(double));
 }
 
 
-float* Transposta_X_Funcao(float **Matriz_Transposta,float *y,float *resultado2, int TAM){
+double* Transposta_X_Funcao(double **Matriz_Transposta,double *y,double *resultado2, int TAM){
      for (int h = 0; h < 6; h++){ // h = LINHAS RESULTADO (Linha da transposta)
         resultado2[h] = 0;
         for (int k = 0; k < TAM; k++){ // K = FATOR QUE PERMITE A OPERACAO ENTRE AS MATRIZES (Coluna da transposta E Linha da original)
@@ -25,7 +25,7 @@ float* Transposta_X_Funcao(float **Matriz_Transposta,float *y,float *resultado2,
 }
 
 
-float **Transposta_X_Original(float **Matriz_Transposta, float **Matriz_Original, float **resultado, int TAM){
+double **Transposta_X_Original(double **Matriz_Transposta, double **Matriz_Original, double **resultado, int TAM){
     for (int h = 0; h < 6; h++){ // h = LINHAS RESULTADO (Linha da transposta)
         for (int y = 0; y < 6; y++){  // Y = COLUNAS RESULTADO (Coluna da original)
             resultado[h][y] = 0;
@@ -37,8 +37,8 @@ float **Transposta_X_Original(float **Matriz_Transposta, float **Matriz_Original
     return resultado;
 }   
 
-float** GerarTransposta (float **Matriz_Original, int TAM){
-    float **Matriz_Transposta = NULL;
+double** GerarTransposta (double **Matriz_Original, int TAM){
+    double **Matriz_Transposta = NULL;
     Matriz_Transposta = Inicializa_Matriz(Matriz_Transposta,6,TAM);
     for (int i = 0; i < 6;i++){
         for (int j = 0; j < TAM; j++){
@@ -48,24 +48,24 @@ float** GerarTransposta (float **Matriz_Original, int TAM){
     return Matriz_Transposta;
 }
 
-void LeArquivo(FILE *input, float *y, float **Matriz_Original, int TAM){
+void LeArquivo(FILE *input, double *y, double **Matriz_Original, int TAM){
     char virgula;
     int i, j;
     for (i = 0; i < TAM; i++){
         Matriz_Original[i][0] = 1;
-        fscanf (input, "%f %c",&y[i], &virgula);
+        fscanf (input, "%lf %c",&y[i], &virgula);
         for (j = 1; j < 6; j++){
             if (j == 5){
-                fscanf(input,"%f",&Matriz_Original[i][j]);
+                fscanf(input,"%lf",&Matriz_Original[i][j]);
             }else{
-                fscanf (input,"%f %c",&Matriz_Original[i][j], &virgula);
+                fscanf (input,"%lf %c",&Matriz_Original[i][j], &virgula);
             }
         }
     }
 }
 
-void ArrumaLinha(float **Matriz, float *Funcao, int i){
-    float Divisor;
+void ArrumaLinha(double **Matriz, double *Funcao, int i){
+    double Divisor;
     if (Matriz[i][i] != 1 && Matriz[i][i] != 0){
         Divisor = Matriz[i][i];
         for (int j = 0; j < 6; j++){
@@ -75,8 +75,8 @@ void ArrumaLinha(float **Matriz, float *Funcao, int i){
     }
 }
 
-void ArrumaColuna (float **Matriz, float *Funcao, int i){
-    float Multiplicador;
+void ArrumaColuna (double **Matriz, double *Funcao, int i){
+    double Multiplicador;
     for (int j = 0; j < 6; j++){
         if (Matriz[j][i] != 0 && i != j){
             Multiplicador = Matriz[j][i];
@@ -88,7 +88,7 @@ void ArrumaColuna (float **Matriz, float *Funcao, int i){
     }
 }
 
-float* ResolveSistemaLinear (float **Matriz, float *Funcao){
+double* ResolveSistemaLinear (double **Matriz, double *Funcao){
     for (int i = 0; i < 6; i++){        
         ArrumaLinha(Matriz,Funcao,i);
         ArrumaColuna(Matriz,Funcao,i);
@@ -96,22 +96,22 @@ float* ResolveSistemaLinear (float **Matriz, float *Funcao){
     return Funcao;
 } 
 
-float **MatrizTesteRegressaoLinear(float **Matriz_Original, int TAM2, FILE *input){
+double **MatrizTesteRegressaoLinear(double **Matriz_Original, int TAM2, FILE *input){
     char virgula;
     int i,j;
     for (i = 0; i < TAM2; i++){
         for (j = 0; j < 6; j++){
             if (j == 5){
-                fscanf(input,"%f",&Matriz_Original[i][j]);
+                fscanf(input,"%lf",&Matriz_Original[i][j]);
             }else{
-                fscanf (input,"%f %c",&Matriz_Original[i][j], &virgula);
+                fscanf (input,"%lf %c",&Matriz_Original[i][j], &virgula);
             }
         }
     }
     return Matriz_Original;
 }
 
-void TesteRegressaoLinear(float **Matriz_Regressao,float *Resultado2, int TAM2){
+void TesteRegressaoLinear(double **Matriz_Regressao,double *Resultado2, int TAM2){
     int i, j;
     double *soma;
     soma = (double*) calloc (TAM2,sizeof(double));
@@ -125,9 +125,9 @@ void TesteRegressaoLinear(float **Matriz_Regressao,float *Resultado2, int TAM2){
     
     FILE *output = fopen("output.txt","w");
     fprintf(output,"%s %s",str, "\n");
-    char str1[] = "               ";
+    char str1[] = "      ";
     for (i = 0; i < TAM2; i++){
-        fprintf(output,"%f %s %f",Matriz_Regressao[i][0],str1, soma[i]);
+        fprintf(output,"%lf %s %lf",Matriz_Regressao[i][0],str1, soma[i]);
         fprintf(output,"%s", "\n");
     }
     printf ("\n TAM = %i \n",TAM2);
@@ -135,16 +135,16 @@ void TesteRegressaoLinear(float **Matriz_Regressao,float *Resultado2, int TAM2){
 
 
 int main(){
-    int Tamanho = 5000,TAM,TAM2;
+    int Tamanho = 43444,TAM,TAM2;
     TAM = Tamanho * 0.7;
     TAM2 = Tamanho - TAM;
-    float *y = NULL;
+    double *y = NULL;
     y = Inicializa_Vetor(y,TAM);
-    float **Matriz_Original = NULL;
+    double **Matriz_Original = NULL;
     Matriz_Original = Inicializa_Matriz(Matriz_Original,TAM,6);
-    float **Matriz_Transposta = NULL;
-    float **Resultado1 = NULL;
-    float *Resultado2 = NULL;
+    double **Matriz_Transposta = NULL;
+    double **Resultado1 = NULL;
+    double *Resultado2 = NULL;
     FILE *input = fopen ("input.txt","r");
     LeArquivo(input,y,Matriz_Original,TAM);
     Matriz_Transposta = GerarTransposta(Matriz_Original,TAM);
@@ -157,12 +157,12 @@ int main(){
     Resultado2 = ResolveSistemaLinear(Resultado1,Resultado2);
     free(Resultado1);
     free(Matriz_Original);
-    printf ("\nIntercept = %f",Resultado2[0]);
-    printf ("\na1 = %f",Resultado2[1]);
-    printf ("\na2 = %f",Resultado2[2]);
-    printf ("\na3 = %f",Resultado2[3]);
-    printf ("\na4 = %f",Resultado2[4]);
-    printf ("\na5 = %f\n\n",Resultado2[5]);
+    printf ("\nIntercept = %lf",Resultado2[0]);
+    printf ("\na1 = %lf",Resultado2[1]);
+    printf ("\na2 = %lf",Resultado2[2]);
+    printf ("\na3 = %lf",Resultado2[3]);
+    printf ("\na4 = %lf",Resultado2[4]);
+    printf ("\na5 = %lf\n\n",Resultado2[5]);
     Matriz_Original = Inicializa_Matriz(Matriz_Original,TAM2,6);
     Matriz_Original = MatrizTesteRegressaoLinear(Matriz_Original,TAM2,input);
     TesteRegressaoLinear(Matriz_Original,Resultado2,TAM2);
