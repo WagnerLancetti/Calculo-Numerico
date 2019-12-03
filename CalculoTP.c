@@ -50,22 +50,16 @@ float** GerarTransposta (float **Matriz_Original, int TAM){
 
 void LeArquivo(FILE *input, float *y, float **Matriz_Original, int TAM){
     char virgula;
-    int i, j, para;
+    int i, j;
     for (i = 0; i < TAM; i++){
         Matriz_Original[i][0] = 1;
-        para  = 0;
         fscanf (input, "%f %c",&y[i], &virgula);
-        if (y[i] < 0 ){
-            para++;
-        }
         for (j = 1; j < 6; j++){
-            fscanf (input,"%f %c",&Matriz_Original[i][j], &virgula);
-            if (Matriz_Original[i][j] < 0){
-                para++;
+            if (j == 5){
+                fscanf(input,"%f",&Matriz_Original[i][j]);
+            }else{
+                fscanf (input,"%f %c",&Matriz_Original[i][j], &virgula);
             }
-        }
-        if (para != 0){
-            i = i - 1;
         }
     }
 }
@@ -104,24 +98,21 @@ float* ResolveSistemaLinear (float **Matriz, float *Funcao){
 
 float **MatrizTesteRegressaoLinear(float **Matriz_Original, int TAM2, FILE *input){
     char virgula;
-    int i,j,para;
+    int i,j;
     for (i = 0; i < TAM2; i++){
-        para = 0;
         for (j = 0; j < 6; j++){
-            fscanf (input,"%f %c",&Matriz_Original[i][j], &virgula);
-            if (Matriz_Original[i][j] < 0){
-                para++;
+            if (j == 5){
+                fscanf(input,"%f",&Matriz_Original[i][j]);
+            }else{
+                fscanf (input,"%f %c",&Matriz_Original[i][j], &virgula);
             }
-        }
-        if (para != 0){
-            i = i - 1;
         }
     }
     return Matriz_Original;
 }
 
 void TesteRegressaoLinear(float **Matriz_Regressao,float *Resultado2, int TAM2){
-    int i, j,contador = 0;
+    int i, j;
     double *soma;
     soma = (double*) calloc (TAM2,sizeof(double));
     for (i = 0; i < TAM2; i++){
@@ -130,17 +121,21 @@ void TesteRegressaoLinear(float **Matriz_Regressao,float *Resultado2, int TAM2){
             soma[i] = soma[i] + Matriz_Regressao[i][j] * Resultado2[j];
         }
     }
-    printf ("\nValor REAL |  Valor REGRESSAO \n");
+    char str[] = "Valor REAL |  Valor REGRESSAO";
+    
+    FILE *output = fopen("output.txt","w");
+    fprintf(output,"%s %s",str, "\n");
+    char str1[] = "               ";
     for (i = 0; i < TAM2; i++){
-        printf (" %f  |    %f\n",Matriz_Regressao[i][0],soma[i]);
-        contador++;
+        fprintf(output,"%f %s %f",Matriz_Regressao[i][0],str1, soma[i]);
+        fprintf(output,"%s", "\n");
     }
     printf ("\n TAM = %i \n",TAM2);
 }
 
 
 int main(){
-    int Tamanho = 50,TAM,TAM2;
+    int Tamanho = 5000,TAM,TAM2;
     TAM = Tamanho * 0.7;
     TAM2 = Tamanho - TAM;
     float *y = NULL;
