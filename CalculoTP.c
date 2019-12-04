@@ -125,8 +125,8 @@ void TesteRegressaoLinear(double **Matriz_Regressao,double *Resultado2, int TAM2
     char str[] = "Valor REAL  |  Valor REGRESSAO  |  ERRO";
     FILE *output = fopen("output.txt","w");
     fprintf(output,"%s %s",str, "\n");
-    char str1[] = "      ";
-    char str3[] = "       ";
+    char str1[] = "                  ";
+    char str3[] = "                  ";
     for (i = 0; i < TAM2; i++){
         erro = soma[i] - Matriz_Regressao[i][0];
         erro = fabs(erro);
