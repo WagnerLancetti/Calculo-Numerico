@@ -1,0 +1,1 @@
+void TesteRegressaoLinear(double **Matriz_Regressao,double *Resultado2, int TAM2);
